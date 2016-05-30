@@ -53,39 +53,27 @@ puts "|_|                                       "
   # Calculate and print the average price of the brand's toys
   # Calculate and print the total revenue of all the brand's toy sales combined
 
-	#assming that I know there are only two brands
-	LEGO = "LEGO"
-	lego_num = 0
-	lego_retail_price_sum = 0
-	lego_sales = 0
-	NANO = "Nano Blocks"
-	nano_num = 0
-	nano_retail_price_sum = 0
-	nano_sales = 0
-	products_hash["items"].each do |product|
-		if product["brand"] == LEGO
-			lego_num += 1
-			lego_retail_price_sum += Float(product["full-price"])
-			lego_sales += product["purchases"].length
-		elsif product["brand"]  == NANO
-			nano_num += 1
-			nano_retail_price_sum += Float(product["full-price"])
-			nano_sales += product["purchases"].length
-		else
-			puts "error"
+	brands = products_hash["items"].map {|product| product["brand"]}.uniq
+	brands.each do |brand|
+		brand_stock = 0
+		brand_num_saled = 0
+		brand_total_revenue = 0
+		brand_toy_num_sum = 0
+		brand_toy_price_sum = 0
+		products_hash["items"].each do |toy|
+			if toy["brand"] == brand
+				brand_toy_num_sum += 1
+				brand_toy_price_sum += Float(toy["full-price"])
+				brand_stock += toy["stock"]
+				brand_num_saled += toy["purchases"].length
+				toy["purchases"].each {|each_purchase| brand_total_revenue += Float(each_purchase["price"]) }
+			end
 		end
+
+		puts brand
+		puts "***********************"
+		puts "Number of stocks: #{brand_stock}"
+		puts "Average Product Price: #{(brand_toy_price_sum / brand_toy_num_sum).round(2)}"
+		puts "Total Sales: $#{brand_total_revenue.round(2)}"
+		puts
 	end
-
-	puts LEGO
-	puts "**************"
-	puts "Number of Products: #{lego_num}"
-	puts "Average Product Price: #{(lego_retail_price_sum / lego_num).round(2)}"
-	puts "Total Sales: #{lego_sales}"
-	puts
-
-	puts NANO
-	puts "**************"
-	puts "Number of Products: #{nano_num}"
-	puts "Average Product Price: #{(nano_retail_price_sum / nano_num).round(2)}"
-	puts "Total Sales: #{nano_sales}"
-	puts
