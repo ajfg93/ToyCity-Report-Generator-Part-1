@@ -4,6 +4,9 @@ file = File.read(path)
 products_hash = JSON.parse(file)
 
 # Print today's date
+require 'date'
+puts Date.new(2016,5,30)
+puts
 
 puts "                     _            _       "
 puts "                    | |          | |      "
